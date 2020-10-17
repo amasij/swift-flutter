@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:swift_flutter/custom_widgets/meal_card.dart';
@@ -26,12 +25,6 @@ class _HomeScreen extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<MealCard> cards = [
-      MealCard(Resources.VIGAN_IMAGE),
-      MealCard(Resources.BURGER_IMAGE),
-      MealCard(Resources.PIZZA_IMAGE),
-    ];
-
     List<Widget> widgets = [FeedScreen(), SearchScreen(), ProfileScreen()];
 
     return Scaffold(
@@ -44,8 +37,8 @@ class _HomeScreen extends State<HomeScreen> with TickerProviderStateMixin {
             setState(() {
               _currentIndex = index;
             });
-          }, // new
-          currentIndex: _currentIndex, // new
+          },
+          currentIndex: _currentIndex,
           items: [
             new BottomNavigationBarItem(
                 icon: Icon(Icons.home), title: Text('')),
