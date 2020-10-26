@@ -1,8 +1,7 @@
 import 'dart:async';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:swift_flutter/custom_widgets/meal_card.dart';
 import 'package:swift_flutter/resources/resources.dart';
 import 'package:swift_flutter/screens/feed_screen.dart';
 import 'package:swift_flutter/screens/profile_screen.dart';
@@ -15,7 +14,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> with TickerProviderStateMixin {
-  String homeScreen = '/homeScreen';
   @override
   void dispose() {
     super.dispose();
@@ -25,12 +23,12 @@ class _HomeScreen extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets = [FeedScreen(), SearchScreen(), ProfileScreen()];
+    List<Widget> tabs = [FeedScreen(), SearchScreen(), ProfileScreen()];
 
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: Colors.deepOrange,
+          selectedItemColor: Resources.APP_PRIMARY_COLOR,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           onTap: (int index) {
@@ -51,7 +49,23 @@ class _HomeScreen extends State<HomeScreen> with TickerProviderStateMixin {
         appBar: AppBar(
           title: Text("Swift"),
           automaticallyImplyLeading: false,
+          actions: [
+            InkWell(
+              onTap: () {
+                print("cart tapped");
+              },
+              child: Padding(
+                padding: EdgeInsets.only(right: 14),
+                child:  Badge(
+                  padding: EdgeInsets.all(3),
+                 position: BadgePosition(top: 4,start: 17),
+                  badgeContent: Text('4',style: TextStyle(color: Colors.white),),
+                  child: Icon(Icons.shopping_cart),
+                ),
+              ),
+            )
+          ],
         ),
-        body: widgets[_currentIndex]);
+        body: tabs[_currentIndex]);
   }
 }

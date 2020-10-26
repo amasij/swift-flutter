@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:swift_flutter/resources/resources.dart';
+import 'package:swift_flutter/routes/app_routes.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -14,86 +15,85 @@ class _LoginScreen extends State<LoginScreen> {
       GlobalKey<FormBuilderState>();
 
   final TextEditingController controller = TextEditingController();
-  String initialCountry = 'NG';
-  PhoneNumber number = PhoneNumber(isoCode: 'NG');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset:false,
       appBar: AppBar(
         title: Text("Login"),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Resources.APP_PRIMARY_COLOR,
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: <Widget>[
-          FormBuilder(
-              key: _loginFormKey,
-              child: Padding(
-                padding: EdgeInsets.only(left: 25, right: 25, top: 25),
-                child: Column(
-                  children: <Widget>[
-                    FormBuilderTextField(
-                      attribute: "firstName",
-                      decoration: InputDecoration(labelText: "First Name"),
-                      validators: [
-                        FormBuilderValidators.required(),
-                      ],
-                    ),
-                    Padding(padding: EdgeInsets.only(bottom: 10)),
-                    FormBuilderTextField(
-                      attribute: "lastName",
-                      decoration: InputDecoration(labelText: "Last Name"),
-                      validators: [
-                        FormBuilderValidators.required(),
-                      ],
-                    ),
-                    Padding(padding: EdgeInsets.only(bottom: 10)),
-                    FormBuilderTextField(
-                      attribute: "email",
-                      decoration: InputDecoration(labelText: "Email"),
-                      validators: [
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.email(),
-                      ],
-                    ),
-                    FormBuilderPhoneField(
-                      attribute: "phone",
-                      defaultSelectedCountryIsoCode: "NG",
-                      countryFilterByIsoCode: ["NG"],
-                      decoration: InputDecoration(labelText: "Phone"),
-                    ),
-                    Padding(padding: EdgeInsets.only(bottom: 10)),
-                     RaisedButton(
-                      child: Text("Login"),
-                      color: Colors.orangeAccent,
-                      textColor: Colors.white,
-                      onPressed: () {},
-                    ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(Resources.LOGIN_SCREEN_IMAGE),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          children: <Widget>[
+            FormBuilder(
+                key: _loginFormKey,
+                child: Expanded(
+                    child: Padding(
+                  padding: EdgeInsets.only(left: 25, right: 25, top: 25),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
 
+                      FormBuilderTextField(
+                        attribute: "email",
+                        decoration: InputDecoration(labelText: "Email"),
+                        validators: [
+                          FormBuilderValidators.required(errorText:"Email is required"),
+                          FormBuilderValidators.email(errorText:"Not a valid email"),
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.only(bottom: 10)),
+                      FormBuilderTextField(
+                        obscureText: true,
+                        attribute: "password",
+                        decoration: InputDecoration(labelText: "Password"),
+                        validators: [
+                          FormBuilderValidators.required(errorText: "Password is required"),
 
-//                    InternationalPhoneNumberInput(
-//                      countries: ["NG"],
-//                      onInputChanged: (PhoneNumber number) {
-//                        print(number.phoneNumber);
-//                      },
-//                      onInputValidated: (bool value) {
-//                        print(value);
-//                      },
-//                      selectorConfig: SelectorConfig(
-//                        selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-//                        backgroundColor: Colors.black,
-//                      ),
-//                      ignoreBlank: false,
-//                      autoValidateMode: AutovalidateMode.disabled,
-//                      selectorTextStyle: TextStyle(color: Colors.black),
-//                      initialValue: number,
-//                      textFieldController: controller,
-//                    ),
-                  ],
-                ),
-              ))
-        ],
+                        ],
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: RaisedButton(
+                          padding: EdgeInsets.only(top: 12, bottom: 12),
+                          child: Text("Login"),
+                          color: Resources.APP_PRIMARY_COLOR,
+                          textColor: Colors.white,
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRoute.homeScreen);
+                          },
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                child: Text("Sign up"),
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppRoute.signUpScreen);
+                                },
+                              ),
+                              Text("Forgot Password?")
+                            ],
+                          )
+                      )
+                    ],
+                  ),
+                )))
+          ],
+        ),
       ),
     );
   }
