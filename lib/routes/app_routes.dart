@@ -11,6 +11,7 @@ class AppRoute {
   static const String loginScreen = '/loginScreen';
   static const String signUpScreen = '/signUpScreen';
   static const String foodPreferenceScreen = '/foodPreferenceScreen';
+  static const String firstPage = '/firstPage';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {

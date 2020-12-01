@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:swift_flutter/resources/resources.dart';
+import 'package:swift_flutter/routes/app_routes.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -126,6 +127,9 @@ class _ProfileScreen extends State<ProfileScreen> {
           elevation: 0.2,
           margin: EdgeInsets.only(bottom: 0,top: 0),
           child: ListTile(
+            onTap: (){
+              Navigator.pushNamed(context, AppRoute.loginScreen);
+            },
             title: Text(
               'Logout',
               style: TextStyle(color: Colors.redAccent),

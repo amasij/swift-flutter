@@ -6,7 +6,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class RestaurantCard extends StatefulWidget {
   final String image;
+
   RestaurantCard(this.image);
+
   @override
   _RestaurantCard createState() => _RestaurantCard();
 }
@@ -95,6 +97,19 @@ class _RestaurantCard extends State<RestaurantCard> {
                           children: [
                             Flexible(
                                 child: RatingBar(
+                              ratingWidget: RatingWidget(
+                                  full: Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  half: Icon(
+                                    Icons.star_half,
+                                    color: Colors.amber,
+                                  ),
+                                  empty: Icon(
+                                    Icons.star_border,
+                                    color: Colors.amber,
+                                  )),
                               initialRating: 2.5,
                               minRating: 1,
                               direction: Axis.horizontal,
@@ -103,10 +118,10 @@ class _RestaurantCard extends State<RestaurantCard> {
                               itemSize: 20,
                               itemPadding:
                                   EdgeInsets.symmetric(horizontal: 1.0),
-                              itemBuilder: (context, _) => Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
+//                              itemBuilder: (context, _) => Icon(
+//                                Icons.star,
+//                                color: Colors.amber,
+//                              ),
                               onRatingUpdate: (rating) {
                                 print(rating);
                               },

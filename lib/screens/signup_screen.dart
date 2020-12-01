@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:reactive_forms/reactive_forms.dart';
+import 'package:swift_API/model/user_creation_dto.dart';
+import 'package:swift_flutter/custom_widgets/app_form.dart';
+import 'package:swift_flutter/custom_widgets/background.dart';
 import 'package:swift_flutter/resources/resources.dart';
 import 'package:swift_flutter/routes/app_routes.dart';
+import 'package:swift_flutter/services/signup_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -11,129 +15,117 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreen extends State<SignUpScreen> {
-  final GlobalKey<FormBuilderState> _key =
-      GlobalKey<FormBuilderState>();
+  FormGroup _form = FormGroup({
+    'name': FormControl<String>(validators: [Validators.required]),
+    'email': FormControl<String>(validators: [Validators.required]),
+    'password': FormControl<String>(validators: [Validators.required]),
+    'phone': FormControl<String>(validators: [Validators.required]),
+  });
+
+  SignUpService _signUpService = new SignUpService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset:false,
-      appBar: AppBar(
-        title: Text("Sign Up"),
-        backgroundColor: Resources.APP_PRIMARY_COLOR,
-        automaticallyImplyLeading: false,
-      ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Resources.LOGIN_SCREEN_IMAGE),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  FormBuilder(
-                    key: _key,
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 25, right: 25, top: 25),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            FormBuilderTextField(
-                              attribute: "firstName",
-                              decoration:
-                                  InputDecoration(labelText: "First Name"),
-                              validators: [
-                                FormBuilderValidators.required(errorText: "First name is required"),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(bottom: 10)),
-                            FormBuilderTextField(
-                              attribute: "lastName",
-                              decoration:
-                                  InputDecoration(labelText: "Last Name"),
-                              validators: [
-                                FormBuilderValidators.required(errorText:"Last name is required"),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(bottom: 10)),
-                            FormBuilderTextField(
-                              attribute: "email",
-                              decoration: InputDecoration(labelText: "Email"),
-                              validators: [
-                                FormBuilderValidators.required(),
-                                FormBuilderValidators.email(errorText:"Not a valid email"),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(bottom: 10)),
-                            FormBuilderTextField(
-                              obscureText: true,
-                              attribute: "password",
-                              decoration:
-                                  InputDecoration(labelText: "Password"),
-                              validators: [
-                                FormBuilderValidators.required(errorText: "Password is required"),
-                                FormBuilderValidators.min(6,errorText: "Password must be at least 6 characters"),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(bottom: 10)),
-                            FormBuilderTextField(
-                              obscureText: true,
-                              attribute: "confirmPassword",
-                              decoration:
-                              InputDecoration(labelText: "Confirm Password"),
-                              validators: [
-                                FormBuilderValidators.required(),
-                                FormBuilderValidators.min(6,errorText: "Password must be at least 6 characters")
-                              ],
-                            ),
-                            FormBuilderPhoneField(
-                              attribute: "phone",
-                              defaultSelectedCountryIsoCode: "NG",
-                              countryFilterByIsoCode: ["NG"],
-                              decoration: InputDecoration(labelText: "Phone"),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: RaisedButton(
-                                padding: EdgeInsets.only(top: 12, bottom: 12),
-                                child: Text("Sign Up"),
-                                color: Resources.APP_PRIMARY_COLOR,
-                                textColor: Colors.white,
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoute.foodPreferenceScreen);
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: Center(
-                                child: InkWell(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text("Sign Up"),
+          backgroundColor: Resources.APP_PRIMARY_COLOR,
+          automaticallyImplyLeading: false,
+        ),
+        body: Background(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                ReactiveForm(
+                  formGroup: _form,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 25, right: 25, top: 25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        AppTextField(
+                            formControlName: "name", hintText: "Enter Name"),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        AppTextField(
+                            formControlName: "email", hintText: "Enter Email"),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        AppTextField(
+                          formControlName: "password",
+                          hintText: "Password",
+                          obscureText: true,
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 10)),
+                        AppPhoneNumberField(
+                          formControlName: "phone",
+                          hintText: "Enter Phone",
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 10,
+                                child: OutlineButton(
                                   child: Text("Login"),
-                                  onTap: () {
+                                  color: Colors.white,
+                                  onPressed: () {
                                     Navigator.pushNamed(
                                         context, AppRoute.loginScreen);
                                   },
+                                  textColor: Resources.APP_PRIMARY_COLOR,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: Resources.APP_PRIMARY_COLOR,
+                                      width: 3,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
+                              Expanded(
+                                child: SizedBox(),
+                                flex: 1,
+                              ),
+                              Expanded(
+                                flex: 10,
+                                child: RaisedButton(
+                                  padding: EdgeInsets.only(top: 12, bottom: 12),
+                                  child: Text("Sign Up"),
+                                  color: Resources.APP_PRIMARY_COLOR,
+                                  textColor: Colors.white,
+                                  onPressed: () {
+                                    _form.markAllAsTouched();
+                                    if (_form.valid) {
+                                      UserCreationDto dto =
+                                          _signUpService.getUserCreationDto(
+                                              _form.control("name").value,
+                                              _form.control("phone").value,
+                                              _form.control("email").value,
+                                              _form.control("password").value);
 
+                                      _signUpService
+                                          .registerUser(dto)
+                                          .then((value) {
+                                        //todo add token
+                                        print(value);
+                                        Navigator.pushNamed(context,
+                                            AppRoute.foodPreferenceScreen);
+                                      });
+                                    }
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          )
-        ],
-      ),
-    );
+          ),
+        ));
   }
 }
