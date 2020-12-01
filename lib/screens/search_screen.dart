@@ -8,9 +8,8 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreen extends State<SearchScreen> {
-
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.deepOrange,);
+    return Container(color: Colors.blueGrey,);
   }
 }
