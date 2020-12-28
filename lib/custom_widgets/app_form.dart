@@ -10,7 +10,6 @@ final Map<String, String> globValidationMessages = {
   ValidationMessage.min: 'Too short',
   ValidationMessage.maxLength: 'Too long',
   ValidationMessage.max: 'Too long',
-  'indiregfrontnoface': 'Face is not clear on this card',
   'alreadyExists': 'Item already exists.'
 };
 
@@ -21,8 +20,6 @@ final InputDecoration inputDecoration = InputDecoration(
   border: OutlineInputBorder(
     borderRadius: BorderRadius.circular(0),
   ),
-//                            border: OutlineInputBorder(
-//                                borderSide: new BorderSide()),
   focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(0),
     borderSide: BorderSide(color: Color(0xFF8ED799), width: 1.0),
@@ -121,21 +118,47 @@ class AppPhoneNumberField extends ReactiveFormField<String> {
                       ColorScheme.light(primary: Resources.APP_PRIMARY_COLOR),
                 ),
                 child: InternationalPhoneNumberInput(
-                  onInputChanged: (e) {
-                    field.didChange(e.phoneNumber);
-                  },
-                  hintText: hintText,
-                  textFieldController: state._textController,
-                  focusNode: state._focusController.focusNode,
-                  errorMessage: field.errorText,
-                  initialValue: initialValue,
-                  countries: ['NG'],
-                  formatInput: true,
-                  selectorConfig: SelectorConfig(
-                      selectorType: PhoneInputSelectorType.DROPDOWN,
-                      backgroundColor: Colors.white),
-                  inputDecoration: inputDecoration.copyWith(hintText: hintText)
-                ),
+                    onInputChanged: (e) {
+                      field.didChange(e.phoneNumber);
+                    },
+                    hintText: hintText,
+                    textFieldController: state._textController,
+                    focusNode: state._focusController.focusNode,
+                    errorMessage: field.errorText,
+                    initialValue: initialValue,
+                    countries: ['NG'],
+                    formatInput: true,
+                    selectorConfig: SelectorConfig(
+                        selectorType: PhoneInputSelectorType.DROPDOWN,
+                        backgroundColor: Colors.white),
+                    inputDecoration: effectiveDecoration.copyWith(
+                      contentPadding: EdgeInsets.only(left: 15, right: 15),
+                      filled: true,
+                      errorText: state.errorText,
+                      hintText: hintText,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(0),
+                        borderSide:
+                            BorderSide(color: Color(0xFF8ED799), width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(0),
+                        borderSide:
+                            BorderSide(color: Color(0xFF8ED799), width: 1.0),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(0),
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(0),
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                    )),
               );
             });
 
@@ -147,7 +170,7 @@ class AppPhoneNumberField extends ReactiveFormField<String> {
 
 class _AppPhoneNumberField extends ReactiveFormFieldState<String> {
   TextEditingController _textController;
-  FocusNodeController _focusController = FocusNodeController();
+  FocusController _focusController = FocusController();
 
   @override
   void initState() {

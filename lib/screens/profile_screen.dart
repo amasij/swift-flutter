@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swift_flutter/resources/resources.dart';
 import 'package:swift_flutter/routes/app_routes.dart';
+import 'package:swift_flutter/services/user_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -10,8 +12,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreen extends State<ProfileScreen> {
+  UserService _userService;
   @override
   Widget build(BuildContext context) {
+    _userService = Provider.of<UserService>(context);
     return ListView(
       children: [
         Column(
@@ -128,6 +132,7 @@ class _ProfileScreen extends State<ProfileScreen> {
           margin: EdgeInsets.only(bottom: 0,top: 0),
           child: ListTile(
             onTap: (){
+              _userService.removeUser();
               Navigator.pushNamed(context, AppRoute.loginScreen);
             },
             title: Text(

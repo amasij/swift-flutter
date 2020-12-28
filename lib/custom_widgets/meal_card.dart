@@ -2,12 +2,19 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:badges/badges.dart';
+
+//import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:swift_API/api.dart';
+import 'package:swift_API/model/meal_pojo.dart';
 import 'package:swift_flutter/resources/resources.dart';
+import 'package:swift_flutter/utils/utils.dart';
 
 class MealCard extends StatefulWidget {
-  final String image;
-  MealCard(this.image);
+  final MealPojo meal;
+
+  MealCard(this.meal);
+
   @override
   _MealCard createState() => _MealCard();
 }
@@ -30,15 +37,19 @@ class _MealCard extends State<MealCard> {
                       width: 190.0,
                       height: 190.0,
                       decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage(widget.image))),
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                            Utils.getImageUrl(widget.meal.image),
+                          ),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: Text(
-                        "PIZZA CONYATA",
+                        widget.meal.name,
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -46,7 +57,7 @@ class _MealCard extends State<MealCard> {
                     Padding(
                       padding: EdgeInsets.only(top: 0),
                       child: Text(
-                        "\₦6,700.00",
+                        '\₦ ${Utils.formatCurrency(widget.meal.price)}',
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w900,
@@ -128,18 +139,38 @@ class _MealCard extends State<MealCard> {
           semanticContainer: true,
           child: Stack(
             children: [
-              Image.asset(
-                widget.image,
-                fit: BoxFit.fill,
-                width: double.infinity,
+              Container(
+                margin: EdgeInsets.only(top: 10),
+//                width: 190.0,
+                height: 450.0,
+                decoration: new BoxDecoration(
+//                  shape: BoxShape.rectangle,
+                  image: new DecorationImage(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(
+                      Utils.getImageUrl(widget.meal.image),
+                    ),
+                  ),
+                ),
               ),
+//              CachedNetworkImage(
+//                imageUrl: Utils.getImageUrl(widget.meal.image),
+//                fit: BoxFit.fill,
+////                imageUrl: "http://via.placeholder.com/350x150",
+//                width: double.infinity,
+//                placeholder: (context, url) => CircularProgressIndicator(),
+//              ),
               Positioned(
                 child: Padding(
                   padding: EdgeInsets.only(right: 0),
                   child: Badge(
                     padding: EdgeInsets.all(3),
 //                    position: BadgePosition(top: 4, start: 17),
-                    badgeContent: Icon(Icons.shopping_cart,color: Colors.white,size: 20,),
+                    badgeContent: Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                     child: null,
                   ),
                 ),
@@ -163,7 +194,7 @@ class _MealCard extends State<MealCard> {
                             children: [
                               Flexible(
                                   child: Text(
-                                "PIZZA CONYATA",
+                                widget.meal.name,
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -175,7 +206,7 @@ class _MealCard extends State<MealCard> {
                               Padding(
                                 padding: EdgeInsets.only(right: 10),
                                 child: Text(
-                                  "\₦6,700.00",
+                                  "\₦${Utils.formatCurrency(widget.meal.price)}",
                                   style: TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.w900,
@@ -192,7 +223,7 @@ class _MealCard extends State<MealCard> {
                             children: [
                               Flexible(
                                 child: Text(
-                                  "This is a very fresh and delicious pizza with very nice toppings",
+                                  widget.meal.description,
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w300,
@@ -210,7 +241,7 @@ class _MealCard extends State<MealCard> {
             ],
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(0.0),
           )),
     );
   }

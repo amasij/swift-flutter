@@ -3,10 +3,18 @@ import 'dart:async';
 import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:provider/provider.dart';
+import 'package:swift_API/api.dart';
+import 'package:swift_API/model/meal_filter.dart';
+import 'package:swift_API/model/meal_pojo.dart';
+import 'package:swift_API/model/query_results_meal_pojo.dart';
+import 'package:swift_flutter/custom_widgets/error_response_modal.dart';
 import 'package:swift_flutter/custom_widgets/meal_card.dart';
 import 'package:swift_flutter/custom_widgets/restaurant_card.dart';
 import 'package:swift_flutter/resources/resources.dart';
 import 'package:swift_flutter/routes/app_routes.dart';
+import 'package:swift_flutter/services/feed_service.dart';
+import 'package:swift_flutter/services/user_service.dart';
 
 class FeedScreen extends StatefulWidget {
   @override
@@ -14,16 +22,15 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreen extends State<FeedScreen> {
-  List<MealCard> mealCards = [
-    MealCard(Resources.VIGAN_IMAGE),
-    MealCard(Resources.BURGER_IMAGE),
-    MealCard(Resources.PIZZA_IMAGE),
-    MealCard(Resources.BURGER_IMAGE),
-    MealCard(Resources.VIGAN_IMAGE),
-    MealCard(Resources.PIZZA_IMAGE),
-    MealCard(Resources.VIGAN_IMAGE),
-    MealCard(Resources.BURGER_IMAGE),
-  ];
+
+
+  FeedService _feedService = new FeedService();
+  SwiftAPI _swiftAPI;
+  UserService _userService;
+  int limit = 10;
+  int offset = 0;
+  List<MealPojo> meals = [];
+
 
   List<RestaurantCard> restaurantCards = [
     RestaurantCard(Resources.RESTAURANT_IMAGE_3),
@@ -57,8 +64,19 @@ class _FeedScreen extends State<FeedScreen> {
       ),
     },
   };
+
+  @override
+  void initState() {
+    _swiftAPI = Provider.of<SwiftAPI>(context, listen: false);
+    _userService = Provider.of<UserService>(context, listen: false);
+    _fetchMeals();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _userService = Provider.of<UserService>(context);
+    _swiftAPI = Provider.of<SwiftAPI>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
@@ -91,12 +109,20 @@ class _FeedScreen extends State<FeedScreen> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: mealCards.length,
+            itemCount: meals.length,
             itemBuilder: (context, index) {
+//              return Column(
+//                children: <Widget>[
+//                  ListTile(title: MealCard(meals[index])),
+//                  Padding(
+//                    padding: EdgeInsets.only(bottom: 50),
+//                  )
+//                ],
+//              );
               return index % 5 != 0
                   ? Column(
                       children: <Widget>[
-                        ListTile(title: mealCards[index]),
+                        ListTile(title: MealCard(meals[index])),
                         Padding(
                           padding: EdgeInsets.only(bottom: 50),
                         )
@@ -121,5 +147,16 @@ class _FeedScreen extends State<FeedScreen> {
         ),
       ],
     );
+  }
+
+  _fetchMeals(){
+    _feedService.fetchFeedMeals(_swiftAPI,_userService.getUser().id, limit, offset).then((value){
+     QueryResultsMealPojo results = value;
+     setState(() {
+       limit = results.limit;
+       offset = results.offset;
+       meals.addAll(results.results.toList());
+     });
+    }).catchError((e)=>errorResponseModal(context, e));
   }
 }

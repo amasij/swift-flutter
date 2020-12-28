@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swift_flutter/resources/resources.dart';
 import 'package:swift_flutter/routes/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:basic_utils/basic_utils.dart';
+import 'package:swift_flutter/services/user_service.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,29 +14,19 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
 
-    Timer(
-        Duration(seconds: 2),
-            () {
-              SharedPreferences.getInstance().then((pref) => {
-
-                if(StringUtils.isNullOrEmpty(pref.getString(Resources.PREF_USERNAME))
-                    && StringUtils.isNullOrEmpty(pref.getString(Resources.PREF_PASSWORD))){
-                  Navigator.pushNamed(context, AppRoute.loginScreen)
-                }else{
-                  Navigator.pushNamed(context, AppRoute.homeScreen)
-                }
-              });
-        }
-
-    );
+    Timer(Duration(seconds: 2), () {
+      UserService userService =
+          Provider.of<UserService>(context, listen: false);
+      userService
+          .initUser()
+          .then((value) => Navigator.pushNamed(context, AppRoute.homeScreen))
+          .catchError((e) => Navigator.pushNamed(context, AppRoute.loginScreen));
+    });
   }
-
-
 
   @override
   void dispose() {

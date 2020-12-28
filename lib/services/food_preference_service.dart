@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:swift_API/api.dart';
 import 'package:swift_API/model/meal_category.dart';
+import 'package:swift_API/model/meal_category_pojo.dart';
+import 'package:swift_API/model/user_preference_dto.dart';
 import 'package:swift_flutter/custom_widgets/app_shimmer.dart';
 import 'package:swift_flutter/resources/resources.dart';
 
@@ -51,5 +53,20 @@ class FoodPreferenceService {
         ),
       ),
     );
+  }
+UserPreferenceDto getUserPreferenceDto(List<String> codes){
+    return UserPreferenceDto((b){
+     codes.forEach((e) => b.codes.add(e));
+      return b;
+    });
+}
+
+  Future<List<MealCategoryPojo>> saveFoodPreferences(int userId, UserPreferenceDto dto) async{
+   var response = await _swiftAPI.getUserControllerApi().setUserPreferences(userId, dto);
+   if(response.statusCode == 200){
+     return response.data;
+   }else{
+     return [];
+   }
   }
 }

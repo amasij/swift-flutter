@@ -3,7 +3,6 @@ import 'package:swift_API/model/user_creation_dto.dart';
 import 'package:swift_API/model/user_pojo.dart';
 
 class SignUpService {
-  final SwiftAPI _swiftAPI = new SwiftAPI();
 
   UserCreationDto getUserCreationDto(
       String name, String phoneNumber, String email, String password) {
@@ -16,8 +15,8 @@ class SignUpService {
     });
   }
 
-  Future<UserPojo> registerUser(UserCreationDto dto) async {
-    var response = await _swiftAPI.getUserControllerApi().registerUser(dto);
+  Future<UserPojo> registerUser(SwiftAPI swiftAPI, UserCreationDto dto) async {
+    var response = await swiftAPI.getUserControllerApi().registerUser(dto);
     if (response.statusCode == 200) {
       return response.data;
     }
