@@ -10,6 +10,7 @@ import 'package:swift_flutter/config/error_interceptor.dart';
 import 'package:swift_flutter/resources/resources.dart';
 import 'package:swift_flutter/routes/app_routes.dart';
 import 'package:swift_flutter/screens/splash_screen.dart';
+import 'package:swift_flutter/services/cart_service.dart';
 import 'package:swift_flutter/services/user_service.dart';
 
 void main() {
@@ -59,13 +60,26 @@ class MyApp extends StatelessWidget {
         Provider(create: (_) {
           return new UserService();
         }),
+        Provider(create: (_) {
+          return new CartService();
+        }),
       ],
       child: MaterialApp(
           title: 'Swift',
-           theme: ThemeData(
-             primarySwatch: Resources.APP_PRIMARY_COLOR_MATERIAL,
-             visualDensity: VisualDensity.adaptivePlatformDensity,
-           ),
+          theme: ThemeData(
+            primarySwatch: Resources.APP_PRIMARY_COLOR_MATERIAL,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              inputDecorationTheme: InputDecorationTheme(
+                  hintStyle: TextStyle(color: Colors.black),
+                  labelStyle: TextStyle(color: Colors.black),
+                  fillColor: Colors.black12,
+                  filled: true)
+              /* dark theme settings */
+              ),
+          themeMode: ThemeMode.dark,
           onGenerateRoute: AppRoute.generateRoute,
           home: SplashScreen()),
     );

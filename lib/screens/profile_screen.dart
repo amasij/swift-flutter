@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:swift_flutter/resources/resources.dart';
 import 'package:swift_flutter/routes/app_routes.dart';
 import 'package:swift_flutter/services/user_service.dart';
+import 'package:swift_flutter/utils/utils.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreen extends State<ProfileScreen> {
   UserService _userService;
+
   @override
   Widget build(BuildContext context) {
     _userService = Provider.of<UserService>(context);
@@ -32,14 +34,18 @@ class _ProfileScreen extends State<ProfileScreen> {
                 top: 10,
               ),
               child: Text(
-                "Simon Joseph",
+                Utils.isNotNull(_userService.getUser())
+                    ? _userService.getUser().name
+                    : '',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(top: 5, bottom: 15),
               child: Text(
-                "simonjoseph750@gmail.com",
+                Utils.isNotNull(_userService.getUser())
+                    ? _userService.getUser().email
+                    : '',
                 style: TextStyle(fontSize: 14),
               ),
             ),
@@ -75,7 +81,7 @@ class _ProfileScreen extends State<ProfileScreen> {
         ),
         Card(
           elevation: 0.2,
-          margin: EdgeInsets.only(bottom: 0.3,top: 0),
+          margin: EdgeInsets.only(bottom: 0.3, top: 0),
           child: ListTile(
             leading: Icon(Icons.credit_card),
             title: Text('Payment Methods'),
@@ -88,7 +94,7 @@ class _ProfileScreen extends State<ProfileScreen> {
         ),
         Card(
           elevation: 0.2,
-          margin: EdgeInsets.only(bottom: 0.3,top: 0),
+          margin: EdgeInsets.only(bottom: 0.3, top: 0),
           child: ListTile(
             leading: Icon(Icons.pin_drop),
             title: Text('Delivery Address'),
@@ -101,7 +107,7 @@ class _ProfileScreen extends State<ProfileScreen> {
         ),
         Card(
           elevation: 0.2,
-          margin: EdgeInsets.only(bottom: 0,top: 0),
+          margin: EdgeInsets.only(bottom: 0, top: 0),
           child: ListTile(
             leading: Icon(Icons.restore),
             title: Text('Payment History'),
@@ -117,7 +123,7 @@ class _ProfileScreen extends State<ProfileScreen> {
         ),
         Card(
           elevation: 0.2,
-          margin: EdgeInsets.only(bottom: 0.3,top: 0),
+          margin: EdgeInsets.only(bottom: 0.3, top: 0),
           child: ListTile(
             title: Text('About'),
             trailing: Icon(
@@ -129,9 +135,9 @@ class _ProfileScreen extends State<ProfileScreen> {
         ),
         Card(
           elevation: 0.2,
-          margin: EdgeInsets.only(bottom: 0,top: 0),
+          margin: EdgeInsets.only(bottom: 0, top: 0),
           child: ListTile(
-            onTap: (){
+            onTap: () {
               _userService.removeUser();
               Navigator.pushNamed(context, AppRoute.loginScreen);
             },

@@ -18,22 +18,22 @@ final InputDecoration inputDecoration = InputDecoration(
   filled: true,
   fillColor: Colors.white,
   border: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(0),
+    borderRadius: BorderRadius.circular(10),
   ),
   focusedBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(0),
+    borderRadius: BorderRadius.circular(10),
     borderSide: BorderSide(color: Color(0xFF8ED799), width: 1.0),
   ),
   enabledBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(0),
+    borderRadius: BorderRadius.circular(10),
     borderSide: BorderSide(color: Color(0xFF8ED799), width: 1.0),
   ),
   errorBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(0),
+    borderRadius: BorderRadius.circular(10),
     borderSide: BorderSide(color: Colors.red, width: 1.0),
   ),
   focusedErrorBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(0),
+    borderRadius: BorderRadius.circular(10),
     borderSide: BorderSide(color: Colors.red, width: 1.0),
   ),
 );
@@ -53,7 +53,7 @@ class AppTextField extends ReactiveTextField {
               ..addAll(globValidationMessages)
               ..addAll(validationMessages);
           },
-          decoration: inputDecoration.copyWith(hintText: hintText),
+          decoration: inputDecoration.copyWith(hintText: hintText,fillColor: Colors.black12),
         );
 }
 

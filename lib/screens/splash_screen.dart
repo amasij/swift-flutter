@@ -6,6 +6,7 @@ import 'package:swift_flutter/resources/resources.dart';
 import 'package:swift_flutter/routes/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:basic_utils/basic_utils.dart';
+import 'package:swift_flutter/services/cart_service.dart';
 import 'package:swift_flutter/services/user_service.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,19 +19,27 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 2), () {
-      UserService userService =
-          Provider.of<UserService>(context, listen: false);
-      userService
-          .initUser()
-          .then((value) => Navigator.pushNamed(context, AppRoute.homeScreen))
-          .catchError((e) => Navigator.pushNamed(context, AppRoute.loginScreen));
-    });
+initApp();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  initApp(){
+    Timer(Duration(seconds: 2), () {
+      UserService userService =
+      Provider.of<UserService>(context, listen: false);
+      CartService cartService =
+      Provider.of<CartService>(context, listen: false);
+      cartService.initCart();
+      userService
+          .initUser()
+          .then((value) => Navigator.pushNamed(context, AppRoute.homeScreen))
+          .catchError(
+              (e) => Navigator.pushNamed(context, AppRoute.loginScreen));
+    });
   }
 
   @override

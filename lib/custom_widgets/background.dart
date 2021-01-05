@@ -16,12 +16,12 @@ class _Background extends State<Background> {
     return Stack(
       children: [
         Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Resources.BG_IMAGE),
-              fit: BoxFit.cover,
-            ),
-          ),
+          // decoration: BoxDecoration(
+          //   image: DecorationImage(
+          //     image: AssetImage(Resources.BG_IMAGE),
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
         ),
         widget.child??SizedBox()
       ],

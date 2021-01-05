@@ -10,4 +10,12 @@ class Utils{
     final f = NumberFormat("#,##0.00", "en_US");
     return f.format(amount);
   }
+
+  static bool isNull(Object object){
+    return object == null;
+  }
+
+  static bool isNotNull(Object object){
+    return object != null;
+  }
 }

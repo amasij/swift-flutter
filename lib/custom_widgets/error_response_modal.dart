@@ -4,6 +4,7 @@ import 'package:swift_flutter/custom_widgets/app_button.dart';
 import 'package:swift_flutter/resources/resources.dart';
 import 'package:swift_flutter/utils/error_response.dart';
 import 'package:dio/dio.dart';
+import 'package:swift_flutter/utils/utils.dart';
 
 Future errorResponseModal(BuildContext context, DioError e) {
   return showDialog(
@@ -29,7 +30,8 @@ Future errorResponseModal(BuildContext context, DioError e) {
                   ),
                   Flexible(
                     child: Text(
-                      e.response.data['message'],
+                      Utils.isNotNull(e.response) ?
+                      e.response.data['message'] : "Cannot connect to server",
                       style: TextStyle(fontWeight: FontWeight.w500),
                       textScaleFactor: 1,
 
